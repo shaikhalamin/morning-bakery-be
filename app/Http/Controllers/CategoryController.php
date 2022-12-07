@@ -22,10 +22,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $response = [
-            'success' => true,
-            'data' => $this->categoryService->list(),
-        ];
+        $response = $this->categoryService->list();
 
         return response()->json($response, RESPONSE::HTTP_OK);
     }

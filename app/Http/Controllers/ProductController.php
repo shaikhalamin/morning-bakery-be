@@ -22,10 +22,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $response = [
-            'success' => true,
-            'data' => $this->productService->list(),
-        ];
+        $response = $this->productService->list();
 
         return response()->json($response, RESPONSE::HTTP_OK);
     }

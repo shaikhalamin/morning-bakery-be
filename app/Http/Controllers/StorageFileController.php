@@ -23,10 +23,7 @@ class StorageFileController extends Controller
      */
     public function index()
     {
-        $response = [
-            'success' => true,
-            'data' => $this->storageFileService->list(),
-        ];
+        $response = $this->storageFileService->list();
 
         return response()->json($response, RESPONSE::HTTP_OK);
     }
