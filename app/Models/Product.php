@@ -27,4 +27,9 @@ class Product extends Model
     {
         return $this->hasMany(StorageFile::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

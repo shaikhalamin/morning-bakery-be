@@ -8,19 +8,25 @@ use Illuminate\Http\UploadedFile;
 
 class CloudinaryFile implements FileInterface
 {
-    public function upload(UploadedFile $file, ?array $options = []): CloudinaryEngine
+    public function upload(UploadedFile $file, array $options = ['type' => '']): CloudinaryEngine
     {
-        $cloudinaryEngine = new CloudinaryEngine();
-        $cloudinaryEngine->upload($file->getRealPath(), ['folder' => 'bakery/category_local']);
+        $cnEngine = new CloudinaryEngine();
 
-        return $cloudinaryEngine;
+        $appEnv = config('app.env');
+        $uploadFolder = 'bakery/' . $options['type'];
+        if ($appEnv !== 'production') {
+            $uploadFolder .= '_' . $appEnv;
+        }
+        $cnEngine->upload($file->getRealPath(), ['folder' => $uploadFolder]);
+
+        return $cnEngine;
     }
 
     public function destroy(string $id): CloudinaryEngine
     {
-        $cloudinaryEngine = new CloudinaryEngine();
-        $cloudinaryEngine->destroy($id);
+        $cnEngine = new CloudinaryEngine();
+        $cnEngine->destroy($id);
 
-        return $cloudinaryEngine;
+        return $cnEngine;
     }
 }

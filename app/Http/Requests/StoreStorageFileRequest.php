@@ -26,7 +26,7 @@ class StoreStorageFileRequest extends FormRequest
         return [
             'type' => 'required|string|max:255',
             'size' => 'required|string|max:255',
-            'file_name' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'file_name' => 'required|image',
         ];
     }
 }

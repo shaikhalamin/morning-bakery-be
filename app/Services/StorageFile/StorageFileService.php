@@ -15,7 +15,16 @@ class StorageFileService
 
     public function list(): Paginator
     {
-        return StorageFile::with(['category', 'product'])->orderBy('updated_at', 'desc')->paginate(10);
+        $query = StorageFile::query();
+
+        $filter = request()->query('type');
+        $perPage = !empty(request()->query('per_page')) ? request()->query('per_page') : 20;
+
+        if (!empty($filter)) {
+            $query->where('type', $filter);
+        }
+
+        return $query->orderBy('updated_at', 'desc')->paginate($perPage);
     }
 
     public function create(array $data): StorageFile
@@ -51,5 +60,4 @@ class StorageFileService
     {
         return StorageFile::with(['category', 'product'])->whereIn('id', $ids)->get();
     }
-
 }

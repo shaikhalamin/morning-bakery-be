@@ -15,7 +15,18 @@ class ProductService
 
     public function list(): Paginator
     {
-        return Product::orderBy('updated_at', 'desc')->with('storageFiles')->paginate(20);
+        $query = Product::with(['storageFiles']);
+
+        $filter = request()->query('category');
+        $perPage = !empty(request()->query('per_page')) ? request()->query('per_page') : 20;
+
+        if (!empty($filter)) {
+            $query->whereHas('category', function ($q) use ($filter) {
+                $q->where('alias', $filter);
+            });
+        }
+
+        return $query->orderBy('updated_at', 'desc')->paginate($perPage);
     }
 
     public function create(array $data): Product

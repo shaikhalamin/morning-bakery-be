@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('size');
             $table->string('public_id');
             $table->string('image_url');
+            $table->boolean('active')->default(true);
             $table->foreignId('product_id')
                 ->nullable()
                 ->constrained()

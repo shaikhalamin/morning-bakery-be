@@ -36,7 +36,12 @@ class StorageFileController extends Controller
      */
     public function store(StoreStorageFileRequest $request)
     {
-        $uploadFile = $this->filesService->upload($request->file('file_name'), 'cloudinary_file');
+        $uploadFile = $this->filesService
+            ->upload(
+                file: $request->file('file_name'),
+                uploadDriver: Driver::CLOUDINARY_FILE,
+                options: ['type' => $request->get('type')]
+            );
 
         $payload = [
             ...$request->except(['file_name']),
@@ -81,7 +86,13 @@ class StorageFileController extends Controller
 
         if ($request->hasFile('file_name')) {
             //if file exists then remove the existing one and replace the old one with new
-            $uploadFile = $this->filesService->upload(file: $request->file('file_name'), uploadDriver: 'cloudinary_file');
+
+            $uploadFile = $this->filesService
+                ->upload(
+                    file: $request->file('file_name'),
+                    uploadDriver: Driver::CLOUDINARY_FILE,
+                    options: ['type' => $request->get('type')]
+                );
 
             $payload = [
                 ...$payload,

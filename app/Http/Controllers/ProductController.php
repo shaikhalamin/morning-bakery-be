@@ -8,6 +8,8 @@ use App\Services\Product\ProductService;
 use App\Services\StorageFile\StorageFileService;
 use Symfony\Component\HttpFoundation\Response as RESPONSE;
 use App\Models\Product;
+use Illuminate\Log\Logger;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -23,6 +25,9 @@ class ProductController extends Controller
     public function index()
     {
         $response = $this->productService->list();
+        dd(env('APP_ENV'));
+
+        //dd($response->get());
 
         return response()->json($response, RESPONSE::HTTP_OK);
     }
