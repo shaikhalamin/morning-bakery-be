@@ -1,0 +1,71 @@
+# fly.toml file generated for bakery-backend on 2022-12-09T12:04:22+06:00
+
+app = "bakery-backend"
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[build]
+  [build.args]
+    NODE_VERSION = "14"
+    PHP_VERSION = "8.1"
+
+[env]
+  APP_ENV = "production"
+  LOG_CHANNEL = "stderr"
+  LOG_LEVEL = "info"
+  LOG_STDERR_FORMATTER = "Monolog\\Formatter\\JsonFormatter"
+  APP_KEY="base64:WBQGoxxl04xAn4KQOHcbos7rTxEU/a1cywZGdcX+dwU="
+  APP_DEBUG=false
+  DB_CONNECTION="pgsql"  
+  DB_HOST="bakery-backend-db.internal"
+  DB_PORT=5432
+  DB_DATABASE="morning_fresh_bakery"
+  DB_USERNAME="postgres"
+  BROADCAST_DRIVER="log"
+  CACHE_DRIVER="file"
+  FILESYSTEM_DISK="local"
+  QUEUE_CONNECTION="sync"
+  SESSION_DRIVER="file"
+  SESSION_LIFETIME="120"
+  MEMCACHED_HOST="127.0.0.1"
+  REDIS_HOST="127.0.0.1"
+  REDIS_PASSWORD="null"
+  REDIS_PORT=6379
+  MAIL_MAILER="smtp"
+  MAIL_HOST="mailhog"
+  MAIL_PORT=1025
+  MAIL_USERNAME="null"
+  MAIL_ENCRYPTION="null"
+  MAIL_FROM_ADDRESS="hello@example.com"
+  MAIL_FROM_NAME="${APP_NAME}"
+
+[experimental]
+  allowed_public_ports = []
+  auto_rollback = true
+
+[[services]]
+  http_checks = []
+  internal_port = 8080
+  processes = ["app"]
+  protocol = "tcp"
+  script_checks = []
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
+
+  [[services.ports]]
+    force_https = true
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [[services.tcp_checks]]
+    grace_period = "1s"
+    interval = "15s"
+    restart_limit = 0
+    timeout = "2s"

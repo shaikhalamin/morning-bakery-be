@@ -29,7 +29,6 @@ return new class extends Migration {
                 ->default(1)
                 ->constrained()
                 ->nullOnDelete();
-
             $table->timestamps();
         });
     }

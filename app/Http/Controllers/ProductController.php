@@ -25,7 +25,7 @@ class ProductController extends Controller
     public function index()
     {
         $response = $this->productService->list();
-        dd(env('APP_ENV'));
+       // dd(env('APP_ENV'));
 
         //dd($response->get());
 
