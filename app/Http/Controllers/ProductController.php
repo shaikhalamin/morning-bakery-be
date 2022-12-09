@@ -4,16 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\Product;
+use App\Services\Category\CategoryService;
 use App\Services\Product\ProductService;
 use App\Services\StorageFile\StorageFileService;
 use Symfony\Component\HttpFoundation\Response as RESPONSE;
-use App\Models\Product;
-use Illuminate\Log\Logger;
-use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
-    public function __construct(public StorageFileService $storageFileService, public ProductService $productService)
+    public function __construct(public StorageFileService $storageFileService, public ProductService $productService, public CategoryService $categoryService)
     {
     }
 
@@ -25,10 +24,7 @@ class ProductController extends Controller
     public function index()
     {
         $response = $this->productService->list();
-       // dd(env('APP_ENV'));
-
-        //dd($response->get());
-
+        
         return response()->json($response, RESPONSE::HTTP_OK);
     }
 
@@ -42,6 +38,11 @@ class ProductController extends Controller
     {
         $payload = [...$request->validated()];
         $product = $this->productService->create(data: $payload);
+        $category = $this->categoryService->show(id: $payload['category_id']);
+
+        if ($category) {
+            $category->products()->save($product);
+        }
 
         if ($request->has('storageFile')) {
             $storageFiles = $this->storageFileService->findMany(ids: explode(',', $request->get('storageFile')));
@@ -83,6 +84,11 @@ class ProductController extends Controller
     {
         $payload = [...$request->validated()];
         $this->productService->update(data: $payload, id: $product->id);
+        $category = $this->categoryService->show(id: $payload['category_id']);
+
+        if ($category) {
+            $category->products()->save($product);
+        }
 
         if ($request->has('storageFile')) {
             $storageFiles = $this->storageFileService->findMany(ids: explode(',', $request->get('storageFile')));
