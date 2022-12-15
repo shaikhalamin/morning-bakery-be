@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequest;
 use App\Services\User\UserService;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
 use Symfony\Component\HttpFoundation\Response as RESPONSE;
@@ -29,15 +30,22 @@ class AuthController extends AbstractApiController
         if (!$user || !Hash::check($payload['password'], $user->password)) {
             $errorResponse = [
                 'status' => false,
-                'message' => 'Email & Password does not match with our record.',
+                'message' => 'Email or Password did not match !',
             ];
 
             return $this->apiErrorResponse($errorResponse, RESPONSE::HTTP_UNAUTHORIZED);
         }
 
+        $accessTokenTime = Carbon::now()->addDays(30);
+        $refreshTokenTime = Carbon::now()->addDays(36);
+
         $loginResult = [
             'status' => true,
-            'token' => $user->createToken($user->email)->plainTextToken,
+            'access_token' => $user->createToken(name: $user->email, expiresAt: $accessTokenTime)->plainTextToken,
+            'refresh_token' => $user->createToken($user->email, expiresAt: $refreshTokenTime)->plainTextToken,
+            'expires_at' => $accessTokenTime->getTimestamp(),
+            'role' => $user->role,
+            'user' => $user,
         ];
 
         return $this->apiSuccessResponse($loginResult, RESPONSE::HTTP_OK);

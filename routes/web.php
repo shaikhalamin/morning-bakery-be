@@ -1,11 +1,5 @@
 <?php
 
-// use Cloudinary\Cloudinary;
-// use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
-
-use CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,17 +21,3 @@ Route::get('/upload', function () {
     return view('upload');
 });
 
-Route::post('/upload', function (Request $request) {
-    //$uploadFile = cloudinary()->upload($request->file('file')->getRealPath(),['folder' => 'bakery/category_local']);
-
-    $cloudinaryEngine = new CloudinaryEngine();
-    $cloudinaryEngine->upload($request->file('file')->getRealPath(), ['folder' => 'bakery/category_local']);
-
-    // $upload = new Cloudinary
-
-    // $data =  Cloudinary::upload($request->file('file')->getRealPath(),['folder' => 'bakery/category_local']);
-
-    //dd($cloudinaryEngine);
-
-    dd([$cloudinaryEngine->getPublicId(), $cloudinaryEngine->getSecurePath()]);
-});

@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/login',[AuthController::class,'login']);
+Route::post('/auth/login',[AuthController::class,'login']);
 Route::apiResource('users', UserController::class);
 Route::apiResource('categories', CategoryController::class);
 Route::apiResource('products', ProductController::class);
