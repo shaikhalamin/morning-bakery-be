@@ -13,6 +13,10 @@ ARG PHP_VERSION
 
 LABEL fly_launch_runtime="laravel"
 
+RUN sed -i s/deb.debian.org/archive.debian.org/g /etc/apt/sources.list
+RUN sed -i 's|security.debian.org|archive.debian.org/|g' /etc/apt/sources.list
+RUN sed -i '/stretch-updates/d' /etc/apt/sources.list
+
 RUN apt-get update && apt-get install -y \
     git curl zip unzip rsync postgresql-client ca-certificates vim htop cron \
     php${PHP_VERSION}-pgsql php${PHP_VERSION}-bcmath \
